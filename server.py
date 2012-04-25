@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from dropbox import client, rest, session
-from bottle import route, run, request
+from bottle import route, run, request, template, static_file
 import requests
 import shelve
 import json
@@ -31,10 +31,14 @@ def show_authorize_url():
 
     beanstalk.put(json.dumps(bshit))
 
-
   d.close()
 
   if oauth_token is None:
-    return '<a href="%s">Link</a>' % sess.build_authorize_url(request_token, oauth_callback='http://localhost:8080/')
+    authurl = sess.build_authorize_url(request_token, oauth_callback='http://localhost:8080/')
+    return template('yeah', authurl = authurl)
+
+@route('/static/<path:path>')
+def callback(path):
+    return static_file(path, root='static')
 
 run()

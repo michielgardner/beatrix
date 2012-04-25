@@ -27,22 +27,24 @@ while True:
   token = sess.obtain_access_token(d[str(job_data['oauth_token'])])
   c = client.DropboxClient(sess)
 
-  for search_result in c.search('/', '.jpg'):
-    print('> Result:')
-    print search_result
-    dropbox_path = search_result['path']
-    in_file = requests.get(c.media(search_result['path'])['url']).content
-    
-    f, in_file_string = tempfile.mkstemp()
-    os.write(f, in_file)
-    os.close(f)
+  for search_result in c.search('/test', '.jpg'):
 
-    find_faces_and_replace(in_file_string, replace_file)
-    
-    f = open(in_file_string, 'r')
-    in_file = f.read()
-    f.close()
-    
-    c.put_file(dropbox_path, in_file, overwrite=False)
+    if search_result['path'].rsplit('.', 1)[1] == 'jpg':
+      print('> Result:')
+      print search_result
+      dropbox_path = search_result['path']
+      in_file = requests.get(c.media(search_result['path'])['url']).content
+      
+      f, in_file_string = tempfile.mkstemp()
+      os.write(f, in_file)
+      os.close(f)
+
+      find_faces_and_replace(in_file_string, replace_file)
+      
+      f = open(in_file_string, 'r')
+      in_file = f.read()
+      f.close()
+      
+      c.put_file(dropbox_path, in_file, overwrite=False)
 
   job.delete()
