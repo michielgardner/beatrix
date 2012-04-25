@@ -1,38 +1,36 @@
 import sys, os
-import opencv
 from util import *
-from opencv.cv import *
-from opencv.highgui import *
+from cv import *
 from PIL import Image
 
 def detectObjects(image):
   """Converts an image to grayscale and prints the locations of any 
      faces found"""
-  grayscale = cvCreateImage(cvSize(image.width, image.height), 8, 1)
-  cvCvtColor(image, grayscale, CV_BGR2GRAY)
+  grayscale = CreateImage((image.width, image.height), 8, 1)
+  CvtColor(image, grayscale, CV_BGR2GRAY)
   
-  storage = cvCreateMemStorage(0)
-  cvClearMemStorage(storage)
-  cvEqualizeHist(grayscale, grayscale)
+  storage = CreateMemStorage()
+  #ClearMemStorage(storage)
+  EqualizeHist(grayscale, grayscale)
 
-  cascade = cvLoadHaarClassifierCascade(
-    'haarcascade_frontalface_default.xml',
-    cvSize(1,1))
+  cascade = Load(
+    'haarcascade_frontalface_default.xml')
 
-  faces = cvHaarDetectObjects(grayscale, cascade, storage, 1.2, 2,
-                             CV_HAAR_DO_CANNY_PRUNING, cvSize(50,50))
+  faces = HaarDetectObjects(grayscale, cascade, storage, 1.2, 2,
+                             CV_HAAR_DO_CANNY_PRUNING, (50,50))
 
   positions = []
 
   if faces:
-    positions = [(f.x, f.y, f.width, f.height) for f in faces]
+    print faces
+    positions = [(f[0][0], f[0][1], f[0][2], f[0][3]) for f in faces]
   
   return positions
 
 def find_faces_and_replace(in_file, replace_file):
   
   # Load image
-  main_image = cvLoadImage(in_file);
+  main_image = LoadImage(in_file);
 
   # Get the positions of the faces
   positions = detectObjects(main_image)  

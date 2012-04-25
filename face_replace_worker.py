@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from dropbox import client, rest, session
 import json
 import beanstalkc
