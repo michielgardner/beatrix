@@ -36,6 +36,8 @@ def show_authorize_url():
   if oauth_token is None:
     authurl = sess.build_authorize_url(request_token, oauth_callback='http://localhost:8080/')
     return template('yeah', authurl = authurl)
+  else:
+    return template('done')
 
 @route('/static/<path:path>')
 def callback(path):

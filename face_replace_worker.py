@@ -29,7 +29,7 @@ while True:
   token = sess.obtain_access_token(d[str(job_data['oauth_token'])])
   c = client.DropboxClient(sess)
 
-  for search_result in c.search('/test', '.jpg'):
+  for search_result in c.search('/TNW2012', '.jpg'):
 
     if search_result['path'].rsplit('.', 1)[1] == 'jpg':
       print('> Result:')
