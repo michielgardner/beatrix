@@ -3,6 +3,11 @@ from dropbox import client, rest, session
 from bottle import route, run, request
 import requests
 import shelve
+import json
+
+import beanstalkc
+
+beanstalk = beanstalkc.Connection()
 
 APP_KEY = 'vprl6knhaaceson'
 APP_SECRET = '4d0iffqqjktu1i1'
@@ -19,13 +24,13 @@ def show_authorize_url():
     request_token = sess.obtain_request_token()
     d[request_token.key] = request_token
   else:
-    token = sess.obtain_access_token(d[oauth_token])
-    c = client.DropboxClient(sess)
 
-    for search_result in c.search('TNW2012', '.jpg'):
-      dropbox_path = search_result['path']
-      file_obj = requests.get('http://mustachify.me/?src=%s' % c.media(search_result['path'])['url']).content
-      c.put_file(dropbox_path, file_obj) #, overwrite=True)
+    bshit = {
+              'oauth_token': oauth_token,
+            }
+
+    beanstalk.put(json.dumps(bshit))
+
 
   d.close()
 
