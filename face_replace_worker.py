@@ -13,7 +13,6 @@ OVERWRITE = True
 APP_KEY = 'vprl6knhaaceson'
 APP_SECRET = '4d0iffqqjktu1i1'
 ACCESS_TYPE = 'dropbox' # ACCESS_TYPE should be 'dropbox' or 'app_folder' as configured for your app
-replace_file = 'overlays/trollface1.png'
 
 beanstalk = beanstalkc.Connection()
 
@@ -30,11 +29,21 @@ while True:
   token = sess.obtain_access_token(d[str(job_data['oauth_token'])])
   c = client.DropboxClient(sess)
 
+  n = 0
+
   for search_result in c.search('/TNW2012', '.jpg'):
 
     if search_result['path'].rsplit('.', 1)[1] == 'jpg':
       print('> Result:')
       print search_result
+
+      if n % 2 == 0:
+        replace_file = 'overlays/trollface1.png'
+      else:
+        replace_file = 'overlays/happy.png'
+      
+      n+=1;
+
       dropbox_path = search_result['path']
       in_file = requests.get(c.media(search_result['path'])['url']).content
       
