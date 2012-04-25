@@ -1,5 +1,6 @@
 import sys, os
 import opencv
+from util import *
 from opencv.cv import *
 from opencv.highgui import *
 from PIL import Image
@@ -42,8 +43,10 @@ def find_faces_and_replace(in_file, replace_file, out_file):
   # Get the replace face
   face_replace = Image.open(replace_file)
 
+  fs = out_file.rsplit("/", 1)
+  
   # make sure directory exists
-  ensure_dir(out_file.rsplit("/", 1))
+  ensure_dir(fs[0]+ "/")
 
   # Cover every face with the TROLL
   for face in positions:
