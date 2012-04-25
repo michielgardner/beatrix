@@ -29,7 +29,7 @@ def detectObjects(image):
   
   return positions
 
-def find_faces_and_replace(in_file, replace_file, out_file):
+def find_faces_and_replace(in_file, replace_file):
   
   # Load image
   main_image = cvLoadImage(in_file);
@@ -42,11 +42,6 @@ def find_faces_and_replace(in_file, replace_file, out_file):
 
   # Get the replace face
   face_replace = Image.open(replace_file)
-
-  fs = out_file.rsplit("/", 1)
-  
-  # make sure directory exists
-  ensure_dir(fs[0]+ "/")
 
   # Cover every face with the TROLL
   for face in positions:
@@ -61,11 +56,4 @@ def find_faces_and_replace(in_file, replace_file, out_file):
     # Paste
     image.paste(f, position_xy, f)
 
-  image.save(out_file)
-
-if __name__ == "__main__":
-  in_file = sys.argv[1]
-  replace_file = sys.argv[2]
-  out_file = sys.argv[3]
-  find_faces_and_replace(in_file, replace_file, out_file)
-
+  image.save(in_file, 'jpeg')
