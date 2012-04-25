@@ -9,6 +9,7 @@ import tempfile
 import os
 from face import *
 
+OVERWRITE = True
 APP_KEY = 'vprl6knhaaceson'
 APP_SECRET = '4d0iffqqjktu1i1'
 ACCESS_TYPE = 'dropbox' # ACCESS_TYPE should be 'dropbox' or 'app_folder' as configured for your app
@@ -47,6 +48,6 @@ while True:
       in_file = f.read()
       f.close()
       
-      c.put_file(dropbox_path, in_file, overwrite=False)
+      c.put_file(dropbox_path, in_file, overwrite=OVERWRITE)
 
   job.delete()
