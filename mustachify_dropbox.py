@@ -19,7 +19,6 @@ def show_authorize_url():
     request_token = sess.obtain_request_token()
     d[request_token.key] = request_token
   else:
-    #sess.set_token(access_token_key, d[access_token_key])
     token = sess.obtain_access_token(d[oauth_token])
     c = client.DropboxClient(sess)
 
