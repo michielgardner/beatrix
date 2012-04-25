@@ -59,5 +59,5 @@ while True:
       
       c.put_file(dropbox_path, in_file, overwrite=OVERWRITE)
 
-      if n == 1:
-        job.delete()
+
+  job.delete()
