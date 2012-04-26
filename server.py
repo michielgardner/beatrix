@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-from dropbox import client, rest, session
+from dropbox import session
 from bottle import route, run, request, template, static_file
 import requests
 import shelve
-import json
 from config import config
 import beanstalkc
 
@@ -19,14 +18,12 @@ def show_authorize_url():
     request_token = sess.obtain_request_token()
     d[request_token.key] = request_token
   else:
-    beanstalk.put(json.dumps({'oauth_token': oauth_token}))
+    beanstalk.put(oauth_token)
 
   d.close()
 
   if oauth_token is None:
-    authurl = sess.build_authorize_url(request_token, oauth_callback='http://localhost:8080/')
-
-    return template('yeah', authurl = authurl)
+    return template('yeah', authorize_url = sess.build_authorize_url(request_token, oauth_callback='http://localhost:8080/'))
   else:
     return template('done')
 

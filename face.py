@@ -29,8 +29,8 @@ def find_faces_and_replace(in_file, replace_file):
   # Cover every face with the TROLL
   for face in positions:
     # Get size and position
-    position_xy = (face[0],face[1])
-    size = (face[2],face[3])
+    position_xy = (face[0], face[1])
+    size = (face[2], face[3])
 
     # Resize overlay
     f = face_replace.resize(size)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from dropbox import client, rest, session
+from dropbox import client, session
 import json
 import beanstalkc
 import shelve
@@ -15,17 +15,12 @@ beanstalk = beanstalkc.Connection()
 while True:
 
   print "> Looking for a job"
-  job = beanstalk.reserve()
-  job_data = json.loads(job.body)
-  print job_data
-  
-  d = shelve.open('db/tokens')
-  
-  sess = session.DropboxSession(config['APP_KEY'], config['APP_SECRET'], config['ACCESS_TYPE'])
-  token = sess.obtain_access_token(d[str(job_data['oauth_token'])])
-  c = client.DropboxClient(sess)
 
-  n = 0
+  job = beanstalk.reserve()
+  d = shelve.open('db/tokens')
+  sess = session.DropboxSession(config['APP_KEY'], config['APP_SECRET'], config['ACCESS_TYPE'])
+  token = sess.obtain_access_token(d[job.body])
+  c = client.DropboxClient(sess)
 
   for search_result in c.search('/TNW2012', '.jpg'):
 
@@ -33,27 +28,19 @@ while True:
       print('> Result:')
       print search_result
 
-      if n % 2 == 0:
-        replace_file = 'overlays/trollface1.png'
-      else:
-        replace_file = 'overlays/happy.png'
-      
-      n+=1;
-
       dropbox_path = search_result['path']
-      in_file = requests.get(c.media(search_result['path'])['url']).content
-      
+      in_file = requests.get(c.media(search_result['path'])['url']).content      
       f, in_file_string = tempfile.mkstemp()
+
       os.write(f, in_file)
       os.close(f)
 
-      find_faces_and_replace(in_file_string, replace_file)
+      find_faces_and_replace(in_file_string, config['replace_file'])
       
       f = open(in_file_string, 'r')
       in_file = f.read()
-      f.close()
-      
-      c.put_file(dropbox_path, in_file, overwrite=config['OVERWRITE'])
 
+      f.close()      
+      c.put_file(dropbox_path, in_file, overwrite=config['OVERWRITE'])
 
   job.delete()
