@@ -19,7 +19,7 @@ while True:
   job_data = json.loads(job.body)
   print job_data
   
-  d = shelve.open('db/tokens.db')
+  d = shelve.open('db/tokens')
   
   sess = session.DropboxSession(config['APP_KEY'], config['APP_SECRET'], config['ACCESS_TYPE'])
   token = sess.obtain_access_token(d[str(job_data['oauth_token'])])

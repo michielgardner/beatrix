@@ -13,7 +13,7 @@ beanstalk = beanstalkc.Connection()
 def show_authorize_url():
   oauth_token = request.GET.get('oauth_token')
   sess = session.DropboxSession(config['APP_KEY'], config['APP_SECRET'], config['ACCESS_TYPE'])
-  d = shelve.open('db/tokens.db')
+  d = shelve.open('db/tokens')
 
   if oauth_token is None:
     request_token = sess.obtain_request_token()
