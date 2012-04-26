@@ -28,5 +28,4 @@ pip-log.txt
 
 images/*
 
-tokens.db
-tokens
+db/tokens.db

@@ -8,12 +8,7 @@ import requests
 import tempfile
 import os
 from face import *
-
-OVERWRITE = True
-APP_KEY = 'vprl6knhaaceson'
-APP_SECRET = '4d0iffqqjktu1i1'
-ACCESS_TYPE = 'dropbox' # ACCESS_TYPE should be 'dropbox' or 'app_folder' as configured for your app
-replace_file = 'overlays/trollface1.png'
+from config import config
 
 beanstalk = beanstalkc.Connection()
 
@@ -24,7 +19,7 @@ while True:
   job_data = json.loads(job.body)
   print job_data
   
-  d = shelve.open('tokens')
+  d = shelve.open('db/tokens.db')
   
   sess = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
   token = sess.obtain_access_token(d[str(job_data['oauth_token'])])
@@ -48,6 +43,6 @@ while True:
       in_file = f.read()
       f.close()
       
-      c.put_file(dropbox_path, in_file, overwrite=OVERWRITE)
+      c.put_file(dropbox_path, in_file, overwrite=config['OVERWRITE'])
 
   job.delete()
