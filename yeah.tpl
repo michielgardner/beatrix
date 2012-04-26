@@ -18,7 +18,7 @@
 	<center>
 	<h1>TROLLBOX</h1>
 	<a href="{{authorize_url}}">
-	<img 	src="/static/go.jpg"
+	<img width="600" 	src="/static/go.jpg"
 			onmouseover="this.src='/static/go%20(1).jpg'"
 			onmouseout="this.src='/static/go.jpg'"/>
 	<a>
