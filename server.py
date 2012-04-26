@@ -19,7 +19,7 @@ def show_authorize_url():
     request_token = sess.obtain_request_token()
     d[request_token.key] = request_token
   else:
-    beanstalk.put(json.dumps({'oauth_token': oauth_token))
+    beanstalk.put(json.dumps({'oauth_token': oauth_token}))
 
   d.close()
 
